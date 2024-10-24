@@ -1,46 +1,53 @@
 import os
-from flask import Flask
-import click
+import sys
 import subprocess
+import platform
 
-app = Flask(__name__)
+# Directory structure template
+flask_structure = {
+    'static': {
+        'index.css': '''body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+    flex-direction: column;
+}
 
-@app.cli.command("create-app")
-@click.argument("name")
-def create_app_command(name):
-    """Create a new Flask app with the specified NAME."""
-    try:
-        # Create the main project directory
-        os.makedirs(name)
-        
-        # Create subdirectories for a basic Flask structure
-        os.makedirs(f"{name}/static")
-        os.makedirs(f"{name}/static/css")
-        os.makedirs(f"{name}/static/js")
-        os.makedirs(f"{name}/static/img")
-        os.makedirs(f"{name}/templates")
+.container {
+    margin-top: auto;
+    text-align: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        # Create app.py file with a basic Flask setup
-        with open(f"{name}/app.py", "w") as f:
-            f.write(f'''from flask import Flask, render_template
-from config import Config
+h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
 
-app = Flask(__name__)
-app.config.from_object(Config)
+img {
+    width: 100px;
+    height: auto;
+}
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-                    
-# write more routes here
-
-if __name__ == '__main__':
-    app.run(debug=True)
-''')
-            
-        # creating index.html file to display on home route
-        with open(f"{name}/templates/index.html", "w") as f:
-            f.write(f'''<!DOCTYPE html>
+footer {
+    margin-top: auto;
+    background-color: #f4f4f4;
+    padding: 10px 0;
+    text-align: center;
+    width: 100%;
+}
+''',
+    },
+    'templates': {
+        'index.html': '''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -62,60 +69,31 @@ if __name__ == '__main__':
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-''')
-        # css file for index.html page    
-        with open(f"{name}/static/css/index.css", "w") as f:
-            f.write(f'''body {{
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f4f4f4;
-    flex-direction: column;
-}}
+''',
+    },
+    'app.py': '''from flask import Flask, render_template
+from config import Config
 
-.container {{
-    margin-top: auto;
-    text-align: center;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}}
+app = Flask(__name__)
+app.config.from_object(Config)
 
-h1 {{
-    font-size: 36px;
-    color: #333;
-    margin-bottom: 20px;
-}}
+@app.route('/')
+def home():
+    return render_template('index.html')
+                    
+# write more routes here
 
-img {{
-    width: 100px;
-    height: auto;
-}}
-
-footer {{
-    margin-top: auto;
-    background-color: #f4f4f4;
-    padding: 10px 0;
-    text-align: center;
-    width: 100%;
-}}''')
-
-        # Create a config.py file
-        with open(f"{name}/config.py", "w") as f:
-            f.write('''import os
+if __name__ == '__main__':
+    app.run(debug=True)
+''',
+    'requirements.txt': 'Flask\n',
+    'config.py':'''import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'a_very_secret_key'
     # set up other variables like database uri and debug value
-''')
-
-        # Create .gitignore file for python
-        with open(f"{name}/.gitignore", "w") as f:
-            f.write('''
+''',
+    '.gitignore': '''
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -277,14 +255,59 @@ cython_debug/
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
-''')
+#.idea/''',
+    'README.md': 'A new Flask Project.',
+}
 
-        # Create a README.md file
-        with open(f"{name}/README.md", "w") as f:
-            f.write(f"# {name.capitalize()}\n\nA new Flask project.")
+# Function to create the project structure
+def create_flask_app(app_name):
+    try:
+        # Create project directory
+        os.mkdir(app_name)
+        print(f"Created project folder: {app_name}")
 
-        click.echo(f"Flask app '{name}' created successfully.")
-    
+        # Create virtual environment
+        venv_path = os.path.join(app_name, 'venv')
+        subprocess.run([sys.executable, '-m', 'venv', venv_path])
+        print(f"Created virtual environment at: {venv_path}")
+
+        # Install Flask
+        subprocess.run([os.path.join(venv_path, 'bin', 'pip'), 'install', '-r', 'requirements.txt'], cwd=app_name)
+        
+        for name, content in flask_structure.items():
+            path = os.path.join(app_name, name)
+            if isinstance(content, list):
+                os.mkdir(path)
+                print(f"Created directory: {path}")
+            elif isinstance(content, dict):
+                os.mkdir(path)
+                print(f"Created directory: {path}")
+                for file_name, file_content in content.items():
+                    file_path = os.path.join(path, file_name)
+                    with open(file_path, 'w') as f:
+                        f.write(file_content)
+                    print(f"Created file: {file_path}")
+            else:
+                with open(path, 'w') as f:
+                    f.write(content)
+                print(f"Created file: {path}")
+
+        print(f"Flask app '{app_name}' created successfully!")
+        print(f"\nTo activate the virtual environment, run the following command:")
+        if platform.system() == "Windows":
+            print(f"    {venv_path}\\Scripts\\activate")
+        else:
+            print(f"    source {venv_path}/bin/activate")
+        
+    except FileExistsError:
+        print(f"Error: Folder '{app_name}' already exists.")
     except Exception as e:
-        click.echo(f"Error: {e}")
+        print(f"An error occurred: {e}")
+
+# Main function
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: create-flask-app <app-name>")
+    else:
+        app_name = sys.argv[1]
+        create_flask_app(app_name)
