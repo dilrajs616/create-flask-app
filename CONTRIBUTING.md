@@ -20,30 +20,11 @@ We welcome contributions to **create-flask-app**! Whether you’re fixing bugs, 
    env\Scripts\activate     # On Windows
    ```
 
-3. **Install Development Dependencies**
-   - Install the dependencies required for development, testing, and formatting.
-   ```bash
-   pip install -r requirements-dev.txt
-   ```
-
 ## Code Structure
 
 The project follows a structured directory layout:
 
-- **`create_flask_app_dilrajs616`**: Contains the main script (`__init__.py`) responsible for the app creation logic.
-- **`tests`**: Includes test files to ensure the package is working as expected.
-- **`dist`**: Used for distribution files (created after packaging).
-- **`__pycache__`**: Stores bytecode cache files for faster loading (automatically generated).
-
-## Running Tests
-
-To run tests, use `pytest`:
-
-```bash
-pytest
-```
-
-Make sure all tests pass before submitting a pull request (PR). Adding tests for new features or bug fixes is encouraged.
+- **`flask_make`**: Contains the main script (`__init__.py`) responsible for the app creation logic.
 
 ## Making Changes
 
@@ -94,10 +75,17 @@ To test the CLI tool locally without publishing, you can use `pip install -e .` 
 pip install -e .
 ```
 
+Or you can simply run the python command in the terminal
+
+```bash
+cd flask_make
+python __init__.py app-name
+```
+
 ## Licensing
 
-By contributing to **create-flask-app**, you agree that your contributions will be licensed under the MIT License.
+By contributing to **flask-make**, you agree that your contributions will be licensed under the MIT License.
 
 ---
 
-Thank you for helping make **create-flask-app** better for everyone!
+Thank you for helping make **flask-make** better for everyone!
