@@ -321,12 +321,13 @@ def new(app_name):
 
         print(f"Flask app '{app_name}' created successfully!")
 
-        print(f"\nTo activate the virtual environment, run the following command:")
+        print(f"\nTo run the app, run the following commands:")
         print(f"    cd {app_name}")
         if platform.system() == "Windows":
             print(f"    venv\\Scripts\\activate")
         else:
             print(f"    source venv/bin/activate")
+        print(f"    flask run")
 
     except FileExistsError:
         print(f"Error: Folder '{app_name}' already exists.")
