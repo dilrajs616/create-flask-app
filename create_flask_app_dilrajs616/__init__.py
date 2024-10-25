@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 import platform
+import argparse
 
 # Directory structure template
 flask_structure = {
@@ -280,7 +281,7 @@ def create_structure(base_path, structure):
 
 
 # Function to initialize the Flask app structure
-def create_flask_app(app_name):
+def new(app_name):
     try:
         # Create project directory
         os.makedirs(app_name, exist_ok=True)
@@ -332,10 +333,14 @@ def create_flask_app(app_name):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+def main():
+    parser = argparse.ArgumentParser(description='Create a Flask app.')
+    parser.add_argument('app_name', type=str, help='The name of the Flask app to create.')
+    args = parser.parse_args()  # This will handle the argument parsing
+
+    # Call the new function with the provided app_name
+    new(args.app_name)
+
 # Main function
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: create-flask-app <app-name>")
-    else:
-        app_name = sys.argv[1]
-        create_flask_app(app_name)
+    main()

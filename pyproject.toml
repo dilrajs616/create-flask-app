@@ -22,3 +22,6 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/dilrajs616/create-flask-app"
 Issues = "https://github.com/dilrajs616/create-flask-app/discussions"
+
+[project.scripts]
+create-flask-app = "create_flask_app_dilrajs616:main"
