@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "create_flask_app"
+name = "cfa"
 version = "1.0.0"
 authors = [
   { name="Dilraj Singh", email="dilraj082@gmail.com" },
