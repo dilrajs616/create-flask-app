@@ -18,6 +18,8 @@
 
 - Automatically creates a project folder with Flask's recommended directory structure.
 - Sets up a Python virtual environment inside the project.
+- Installs flask in the project directory.
+- Creates a requirements.txt file.
 - Provides a simple `app.py` file with a working Flask app.
 - Includes a sample `index.html` file in the templates folder to get you started with a basic HTML view.
 - Includes index.css that has the styling for the index page
@@ -93,11 +95,16 @@ The generated Flask app will have the following structure:
 ```bash
 my-flask-app/
 ├── venv/               # Virtual environment directory
-├── static/             # css files
-│   └── index.css       # Static files like CSS, JS, images
+├── static              # Static folder
+│   ├───css             # css folder
+│   │   └── index.css   # sample css file
+│   ├───img             # img folder
+│   └───js              # js folder
 ├── templates/          # HTML templates
 │   └── index.html      # Sample template
 ├── app.py              # Main Flask app script
+├── config.py           # flask app config file
+├── README.md           # README file
 └── requirements.txt    # Installed dependencies (including Flask)
 ```
 

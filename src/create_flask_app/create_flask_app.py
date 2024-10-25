@@ -287,27 +287,39 @@ def create_flask_app(app_name):
         print(f"Created project folder: {app_name}")
 
         # Create virtual environment
-        # venv_path = os.path.join(app_name, 'venv')
-        # subprocess.run([sys.executable, '-m', 'venv', venv_path])
-        # print(f"Created virtual environment at: {venv_path}")
+        venv_path = os.path.join(app_name, 'venv')
+        subprocess.run([sys.executable, '-m', 'venv', venv_path])
+        print(f"Created virtual environment at: {venv_path}")
 
-        # # Determine the pip executable path based on the OS
-        # if platform.system() == "Windows":
-        #     pip_executable = os.path.join(venv_path, 'Scripts', 'pip.exe')
-        # else:
-        #     pip_executable = os.path.join(venv_path, 'bin', 'pip')
+        if platform.system() == "Windows":
+            activate_script = os.path.join(venv_path, 'Scripts', 'activate')
+            command = f'{activate_script} && echo "Virtual environment activated."'
+            subprocess.run(command, shell=True)
+        else:
+            activate_script = os.path.join(venv_path, 'bin', 'activate')
+            command = f'source {activate_script}'
+            subprocess.run(command, shell=True, executable="/bin/bash")
+        
+        print(f"Activated virtual environment at: {venv_path}")
 
-        # # Install Flask
-        # subprocess.run([pip_executable, 'install', 'flask'], cwd=app_name)
+        # Determine the pip executable path based on the OS
+        if platform.system() == "Windows":
+            pip_executable = os.path.join(venv_path, 'Scripts', 'pip.exe')
+        else:
+            pip_executable = os.path.join(venv_path, 'bin', 'pip')
 
-        # # Create requirements.txt using pip freeze 
-        # with open(os.path.join(app_name, 'requirements.txt'), 'w') as req_file:
-        #     subprocess.run([pip_executable, 'freeze'], stdout=req_file)
+        # Install Flask
+        subprocess.run([pip_executable, 'install', 'flask'], cwd=app_name)
+
+        # Create requirements.txt using pip freeze 
+        with open(os.path.join(app_name, 'requirements.txt'), 'w') as req_file:
+            subprocess.run([pip_executable, 'freeze'], stdout=req_file)
         
         # Create the structure inside the app directory
         create_structure(app_name, flask_structure)
 
         print(f"Flask app '{app_name}' created successfully!")
+
         print(f"\nTo activate the virtual environment, run the following command:")
         print(f"    cd {app_name}")
         if platform.system() == "Windows":
