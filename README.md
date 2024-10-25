@@ -1,6 +1,6 @@
-# create-flask-app
+# flask-make
 
-`create-flask-app` is a Python package that helps you quickly set up a new Flask project with a predefined directory structure. This CLI tool creates the app folder, a virtual environment, installs Flask, and generates an organized directory structure for you, including templates, static files, and configuration files.
+`flask-make` is a Python package that helps you quickly set up a new Flask project with a predefined directory structure. This CLI tool creates the app folder, a virtual environment, installs Flask, and generates an organized directory structure for you, including templates, static files, and configuration files.
 
 ## Features
 - **Automated Project Setup**: Sets up a new Flask app with a standard directory structure.
@@ -10,25 +10,25 @@
 
 ## Installation
 
-To install `create-flask-app`, simply use pip:
+To install `flask-make`, simply use pip:
 
 ```bash
-pip install create-flask-app
+pip install flask-make
 ```
 
 ## Usage
 
-Once installed, you can create a new Flask app by running the `create-flask-app` command in your terminal:
+Once installed, you can create a new Flask app by running the `flask-make` command in your terminal:
 
 ```bash
-create-flask-app <app-name>
+flask-make <app-name>
 ```
 
 Replace `<app-name>` with the desired name of your new Flask project folder.
 
 ### Example
 ```bash
-create-flask-app my_flask_app
+flask-make my_flask_app
 ```
 
 This will:
