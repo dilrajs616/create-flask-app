@@ -6,7 +6,8 @@ import platform
 # Directory structure template
 flask_structure = {
     'static': {
-        'index.css': '''body {
+        'css': {
+            'index.css': '''body {
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -43,8 +44,10 @@ footer {
     padding: 10px 0;
     text-align: center;
     width: 100%;
-}
-''',
+}'''
+        },
+        'js': {},
+        'img': {}
     },
     'templates': {
         'index.html': '''<!DOCTYPE html>
@@ -59,7 +62,7 @@ footer {
 <body>
   <div class="container">
     <h1>Hello Flask App</h1>
-    <img src="https://flask.palletsprojects.com/en/2.0.x/_images/flask-logo.png" alt="Flask Logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" alt="Flask Logo">
   </div>
 
   <footer>
@@ -86,7 +89,6 @@ def home():
 if __name__ == '__main__':
     app.run(debug=True)
 ''',
-    'requirements.txt': 'Flask\n',
     'config.py':'''import os
 
 class Config:
@@ -259,46 +261,60 @@ cython_debug/
     'README.md': 'A new Flask Project.',
 }
 
-# Function to create the project structure
+# Function to create the directory structure recursively
+def create_structure(base_path, structure):
+    for name, content in structure.items():
+        path = os.path.join(base_path, name)
+        
+        # If content is a dictionary, create a directory and call function recursively
+        if isinstance(content, dict):
+            os.makedirs(path, exist_ok=True)
+            print(f"Created directory: {path}")
+            create_structure(path, content)
+        
+        # If content is a string (file content), create the file
+        else:
+            with open(path, 'w') as f:
+                f.write(content)
+            print(f"Created file: {path}")
+
+
+# Function to initialize the Flask app structure
 def create_flask_app(app_name):
     try:
         # Create project directory
-        os.mkdir(app_name)
+        os.makedirs(app_name, exist_ok=True)
         print(f"Created project folder: {app_name}")
 
         # Create virtual environment
-        venv_path = os.path.join(app_name, 'venv')
-        subprocess.run([sys.executable, '-m', 'venv', venv_path])
-        print(f"Created virtual environment at: {venv_path}")
+        # venv_path = os.path.join(app_name, 'venv')
+        # subprocess.run([sys.executable, '-m', 'venv', venv_path])
+        # print(f"Created virtual environment at: {venv_path}")
 
-        # Install Flask
-        subprocess.run([os.path.join(venv_path, 'bin', 'pip'), 'install', '-r', 'requirements.txt'], cwd=app_name)
+        # # Determine the pip executable path based on the OS
+        # if platform.system() == "Windows":
+        #     pip_executable = os.path.join(venv_path, 'Scripts', 'pip.exe')
+        # else:
+        #     pip_executable = os.path.join(venv_path, 'bin', 'pip')
+
+        # # Install Flask
+        # subprocess.run([pip_executable, 'install', 'flask'], cwd=app_name)
+
+        # # Create requirements.txt using pip freeze 
+        # with open(os.path.join(app_name, 'requirements.txt'), 'w') as req_file:
+        #     subprocess.run([pip_executable, 'freeze'], stdout=req_file)
         
-        for name, content in flask_structure.items():
-            path = os.path.join(app_name, name)
-            if isinstance(content, list):
-                os.mkdir(path)
-                print(f"Created directory: {path}")
-            elif isinstance(content, dict):
-                os.mkdir(path)
-                print(f"Created directory: {path}")
-                for file_name, file_content in content.items():
-                    file_path = os.path.join(path, file_name)
-                    with open(file_path, 'w') as f:
-                        f.write(file_content)
-                    print(f"Created file: {file_path}")
-            else:
-                with open(path, 'w') as f:
-                    f.write(content)
-                print(f"Created file: {path}")
+        # Create the structure inside the app directory
+        create_structure(app_name, flask_structure)
 
         print(f"Flask app '{app_name}' created successfully!")
         print(f"\nTo activate the virtual environment, run the following command:")
+        print(f"    cd {app_name}")
         if platform.system() == "Windows":
-            print(f"    {venv_path}\\Scripts\\activate")
+            print(f"    venv\\Scripts\\activate")
         else:
-            print(f"    source {venv_path}/bin/activate")
-        
+            print(f"    source venv/bin/activate")
+
     except FileExistsError:
         print(f"Error: Folder '{app_name}' already exists.")
     except Exception as e:
