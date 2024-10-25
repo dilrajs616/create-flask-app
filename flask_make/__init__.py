@@ -303,18 +303,16 @@ def new(app_name):
         
         print(f"Activated virtual environment at: {venv_path}")
 
-        # Determine the pip executable path based on the OS
-        if platform.system() == "Windows":
-            pip_executable = os.path.join(venv_path, 'Scripts', 'pip.exe')
-        else:
-            pip_executable = os.path.join(venv_path, 'bin', 'pip')
-
         # Install Flask
-        subprocess.run([pip_executable, 'install', 'flask'], cwd=app_name)
+        subprocess.run([sys.executable, "-m", "pip", "install", "flask"], cwd=app_name)
 
-        # Create requirements.txt using pip freeze 
-        with open(os.path.join(app_name, 'requirements.txt'), 'w') as req_file:
-            subprocess.run([pip_executable, 'freeze'], stdout=req_file)
+        # Create requirements.txt using pip freeze
+        requirements_path = os.path.join(app_name, 'requirements.txt')
+        with open(requirements_path, 'w') as req_file:
+            subprocess.run([sys.executable, "-m", "pip", "freeze"], stdout=req_file, cwd=app_name)
+
+        print(f"Created requirements.txt at: {requirements_path}")
+        
         
         # Create the structure inside the app directory
         create_structure(app_name, flask_structure)
