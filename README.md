@@ -71,7 +71,3 @@ source venv/bin/activate
 
 ## License
 This project is licensed under the MIT License.
-
----
-
-This README provides users with everything they need to understand and get started with your package.
