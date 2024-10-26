@@ -8,69 +8,78 @@ import argparse
 flask_structure = {
     'static': {
         'css': {
-            'index.css': '''body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
+            'styles.css': '''body {
+    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f4f4f4;
-    flex-direction: column;
+    height: 100vh;
+    background-color: #282c34;
+    color: white;
+    margin: 0;
 }
 
-.container {
-    margin-top: auto;
+#app {
     text-align: center;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-    font-size: 36px;
-    color: #333;
-    margin-bottom: 20px;
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+    background-color: #61dafb;
+    border: none;
+    border-radius: 5px;
+    color: black;
 }
 
-img {
-    width: 100px;
-    height: auto;
+button:hover {
+    background-color: #21a1f1;
 }
 
-footer {
-    margin-top: auto;
-    background-color: #f4f4f4;
-    padding: 10px 0;
-    text-align: center;
-    width: 100%;
-}'''
+.logo-container {
+    margin-top: 20px;
+}
+
+.logo {
+    height: 40vmin;
+    pointer-events: none;
+}
+'''
         },
-        'js': {},
+        'js': {
+            'script.js' : '''let counter = 0;
+
+const counterElement = document.getElementById('counter');
+const incrementButton = document.getElementById('incrementButton');
+
+incrementButton.addEventListener('click', () => {
+    counter++;
+    counterElement.textContent = counter;
+});
+'''
+        },
         'img': {}
     },
     'templates': {
         'index.html': '''<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello Flask App</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter App</title>
+    <link rel="stylesheet" href="static/css/styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Hello Flask App</h1>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" alt="Flask Logo">
-  </div>
-
-  <footer>
-    <p class="text-muted">Credit: Dilraj Singh</p>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <div id="app">
+        <h1>Counter: <span id="counter">0</span></h1>
+        <button id="incrementButton">Increment</button>
+        <div class="logo-container">
+            <img src="https://i.pinimg.com/originals/12/f6/ac/12f6accc21f3cad0047fc68fc282569c.gif" alt="Flask Logo" class="logo" />
+        </div>
+    </div>
+    <script src="static/js/script.js"></script>
 </body>
 </html>
 ''',
